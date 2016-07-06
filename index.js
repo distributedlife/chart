@@ -36,6 +36,8 @@ function chart(data, opts) {
   w -= pad * 2;
   h -= pad * 2;
 
+  var tight = opts.tight || true;
+
   // setup
   var out = matrix(w, h);
   var m = max(data) || 0;
@@ -68,9 +70,13 @@ function chart(data, opts) {
 
   // x-axis
   var x = labelw + labelp;
-  while (x < w) {
+  var dotPadding = tight ? (w / 2) : w;
+  while (x < dotPadding) {
     out[h - 1][x++] = '․';
-    out[h - 1][x++] = ' ';
+
+    if (!tight) {
+      out[h - 1][x++] = ' ';
+    }
   }
 
   // strip excess from head
@@ -92,7 +98,7 @@ function chart(data, opts) {
       out[Math.abs(y - h) - 2][x] = c;
     }
 
-    x += 2;
+    x += 1 + (tight ? 0 : 1);
   }
 
   return padding(string(out, h), pad);
